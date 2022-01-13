@@ -1,0 +1,63 @@
+"""     10. Creeu un programa que rebrà dos caràcters i dos noms de fitxers on es reemplaçarà el primer caràcter rebut pel segon dins del primer fitxer indicat desant-lo amb el segon nom de fitxer indicat. 
+Exemple: 
+./canvia a A un.txt dos.txt  
+
+Valideu que es reben 4 paràmetres. Així mateix, assegureu-vos de l'existència del primer fitxer rebut. Després, el mateix programa mostrarà el contingut del fitxer nou creat."""
+
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import sys
+
+class MyError(Exception): 
+    # Constructor or Initializer 
+    def __init__(self, value, mensaje): 
+# se cargan los valores enviados en el error al propio a MyError 
+# para poderlo utilizar en la sección except
+        self.value = value
+        self.msg=mensaje
+
+
+def sustituirCaracter(argv):
+
+    try:
+        if len(sys.argv) == 5:   # compruebo el número de parámetros, han de ser 5, nombre del programa nombre de los  2 fichero y 2 carácteres a sustituir
+            c1 = sys.argv[1] # Carácter a buscar
+            c2 = sys.argv[2] #CArácter a sustituir
+            f1 = open('/home/nando/programacio/fitxers/'+sys.argv[3], 'r') 
+            f2 = open('/home/nando/programacio/fitxers/'+sys.argv[4], 'w')   
+        else:
+            raise(MyError(len(sys.argv),"Has de introducir 2 letras y el nombre de 2 archivos."))
+        # Lanzo una excepción si se indica únicamente el nombre del fichero 
+    except MyError as error: 
+        print("Número de parámetros incorrecto: ",error.value, "\nMensaje: ", error.msg)
+    
+    
+    except FileNotFoundError:
+        print("Alguno de los archivos no existe!!")
+
+    else:
+        print("Buscando la letra ",sys.argv[1]," en el fichero ",sys.argv[3],"...\n")
+        
+        cont = 0    # Contador de líneas
+        linea = f1.readline()
+
+        for linea in f1: # recorro cada carácter de cada línea de f1
+            for caracter in linea:
+                if caracter == c1: # si encuentra el carácter c1 lo
+                    f2.write(c2)   # sustituye por c2
+                else:
+                    f2.write(caracter) # escribo los carácteres en f2
+
+        contenidof1 = f1.read()
+        contenidof2 = f2.read()
+        print("Fichero 1:")
+        print(contenidof1)
+        print()
+        print("Fichero 2:")
+        print(contenidof2)
+
+
+
+
+sustituirCaracter(sys.argv)

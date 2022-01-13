@@ -1,0 +1,11 @@
+#! /usr/bin/env python3
+
+import sys
+
+if len(sys.argv)!=2:
+	print ("Posa un argument com a nom de fitxer!")
+else:
+	f = open(sys.argv[1], 'w')
+	text = input("Que posem al fitxer?")
+	f.write(text)
+	f.close()

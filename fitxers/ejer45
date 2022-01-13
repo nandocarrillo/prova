@@ -1,0 +1,63 @@
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+from os.path import isfile # Importo la función isfile
+import sys
+
+class MyError(Exception): 
+    # Constructor or Initializer 
+    def __init__(self, value, mensaje): 
+# se cargan los valores enviados en el error al propio a MyError 
+# para poderlo utilizar en la sección except
+        self.value = value
+        self.msg=mensaje
+
+
+def obrirFitxerParam(argv):
+
+    f = open('/home/nando/programacio/fitxers/'+sys.argv[1], 'r')    
+           
+    contenido = f.read()
+    print ("El contingut del fitxer es:")
+    print ("=======================")
+    print (contenido)
+    print ("=======================")
+    print ("Longitud", len(contenido), "bytes.")
+    f.close()
+
+
+
+def crearFitxerParam(argv):
+
+    f = open('/home/nando/programacio/fitxers/'+sys.argv[1], 'w')    
+    
+    print("Introdueix les dades que vols guardar al fitxer,\nper finalitzar escriu \'ACABA\': ")
+    # Esta estructura simula el Do-While, inexistente en Python
+    while True:
+        text = input()
+        if "ACABA" not in text:
+            f.write(text)   
+        else:
+            text = text[0:-5]   # Elimina la palabra ACABA retrocediendo 5 carácteres
+            f.write(text)
+            break
+                
+        f.close()            
+        
+# -------- Programa principal -------------------------------
+        
+try: 
+    if len(sys.argv) == 2:   # compruebo el número de parámetros, han de ser 2, nombre del progrma y nombre del fichero a abrir
+        if isfile('/home/nando/programacio/fitxers/'+sys.argv[1]):
+            # Si el fichero existe llamo a la función para leerlo
+            print("El fichero existe, mostrando el contenido.....")
+            obrirFitxerParam(sys.argv)
+        else:
+            print("el fichero no existe, lo vamos a crear....")
+            crearFitxerParam(sys.argv) 
+                
+    else:
+        raise(MyError(len(sys.argv),"Falta el nom de l'arxiu."))
+        # Lanzo una excepción si no se indica el nombre del fichero 
+except MyError as error: 
+        print("Número de parámetros: ",error.value, "\nMensaje: ", error.msg)

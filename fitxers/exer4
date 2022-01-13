@@ -1,0 +1,51 @@
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import sys
+import os.path
+
+class MyError(Exception): 
+    # Constructor or Initializer 
+    def __init__(self, value, mensaje): 
+# se cargan los valores enviados en el error al propio a MyError 
+# para poderlo utilizar en la sección except
+        self.value = value
+        self.msg=mensaje
+
+
+def crearFitxerParam(argv):
+
+    try:
+        if len(sys.argv) == 2:   # compruebo el número de parámetros, han de ser 2, nombre del progrma y nombre del fichero a abrir
+           
+            f = open(r'/home/nando/programacio/fitxers/'+sys.argv[1], 'wb')    
+        else:
+            raise(MyError(len(sys.argv),"Falta el nom de l'arxiu."))
+        # Lanzo una excepción si no se indica únicamente el nombre del fichero 
+    except MyError as error: 
+        print("Número de parámetros: ",error.value, "\nMensaje: ", error.msg)
+    
+    
+    except FileNotFoundError:
+        print("El fitxer no existeix!!")
+
+    else:
+        print("Introdueix les dades que vols guardar al fitxer,\nper finalitzar escriu \'ACABA\': ")
+        # Esta estructura simula el Do-While, inexistente en Python
+        while True:
+            text = input()
+            bytes(text, encoding = "UTF-8")
+            if "ACABA" not in text:
+                f.write(text)   
+            else:
+                f.write(text)
+                posicion = f.tell()
+                f.seek(posicion-5, 2)   # Elimina la palabra ACABA retrocediendo 5 carácteres
+                f.write(text)
+                break
+                
+        f.close()            
+        
+
+crearFitxerParam(sys.argv)
+
